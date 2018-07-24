@@ -107,7 +107,7 @@ public class HexMap extends JPanel {
 	
 	public Hex getHex(int x, int y) {
 		int xG = x / xSize;
-		int yG = y / ySize;
+		int yG = y / ySize; 
 		
 		if(xG > xSize * xCols || yG > ySize * yRows) {
 			System.out.println("Invalid point");
