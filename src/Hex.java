@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class Hex{
 	public static final int HEX_POINTS = 6;
 	
@@ -7,11 +9,14 @@ public class Hex{
 	private int ySize;
 	private int[] textCo = new int[2];
 	
+	private Color col;
+	
 	public Hex() {
 		xCoords = new int[6];
 		yCoords = new int[6];
 		xSize = -1;
 		ySize = -1;
+		col = Color.blue;
 	}
 	
 	public Hex(int[] xs, int[] ys) {
@@ -28,6 +33,7 @@ public class Hex{
 			yCoords = new int[6];
 			throw new IllegalArgumentException("Invalid Y-Coordinates Array Size");
 		}
+		col = Color.blue;
 	}
 	
 	public Hex(int[]xs, int[] ys, int xS, int yS) {
@@ -49,6 +55,8 @@ public class Hex{
 		
 		textCo[0] = xCoords[0];
 		textCo[1] = yCoords[2];
+		
+		col = Color.blue;
 	}
 	public int[] getXCos() {
 		return xCoords;
@@ -64,5 +72,13 @@ public class Hex{
 	
 	public int getTextY() {
 		return textCo[1];
+	}
+	
+	public void setColor(Color c) {
+		col = c;
+	}
+	
+	public Color getColor() {
+		return col;
 	}
 }
