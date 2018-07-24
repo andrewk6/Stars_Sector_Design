@@ -6,6 +6,8 @@
  */
 //package polycreation;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,65 +23,68 @@ public class HexMap extends JPanel {
 
 	private int ySize = 18;
 	private int yOff = 50;
-	private int yRows = 15;
+	private int rows = 15;
 
 	private int xSize = 24;
 	private int xOff = 50;
-	private int xCols = 11;
+	private int cols = 11;
 	
 	private int st = 3;
 
-	private Hex[][] hexs;
+	//private Hex[][] hexs;
+	//ArrayList
 	double m;
 
 	public HexMap() {
-		hexs = new Hex[xCols][yRows];
+		//hexs = new Hex[rows][cols];
 		m = -1;
-		this.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Click");
-				//getSelectedHexagon(e.getX(), e.getY());
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
+//		this.addMouseListener(new MouseListener() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				System.out.println("Click");
+//				getHex(e.getX(), e.getY());
+//				//getSelectedHexagon(e.getX(), e.getY());
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		});
 	}
 
-	public void paint(Graphics g) {
-
+	public void paintComponent(Graphics g) {
+		//System.out.println("Painting");
+		int row = 0, col = 0;
 		int counter = 1;
-		for (int yValue = yOff; yValue < yRows * ySize + yOff; yValue += ySize) {
+		for (int yValue = yOff; yValue < rows * ySize + yOff; yValue += ySize) {
 			int strtXVal = xOff;
 			if (counter % 2 == 0) // if even start x halfway over
 			{
 				strtXVal = xSize / 2 + xOff;
 			}
 
-			for (int xValue = strtXVal; xValue < xCols * xSize; xValue += xSize) {
+			for (int xValue = strtXVal; xValue < cols * xSize; xValue += xSize) {
 				
 				int xValues[] = { xValue, (xValue + xSize / 2), (xValue + xSize), (xValue + xSize),
 						(xValue + xSize / 2), (xValue + 0) };
@@ -87,18 +92,31 @@ public class HexMap extends JPanel {
 				int yValues[] = { (yValue + ySize / 3), yValue, (yValue + ySize / 3), (yValue + ySize),
 						(yValue + ((ySize / 3) + ySize)), (yValue + ySize) };
 				
+				Polygon p = new Polygon();
+				p.addPoint(xValue, (yValue + ySize / 3));
+				p.addPoint((xValue + xSize / 2), yValue);
+				p.addPoint((xValue + xSize), (yValue + ySize / 3));
+				p.addPoint((xValue + xSize), (yValue + ySize));
+				p.addPoint((xValue + xSize / 2), (yValue + ((ySize / 3) + ySize)));
+				p.addPoint((xValue + 0) , (yValue + ySize));
+				
 				Hex hex = new Hex(xValues, yValues, xSize, ySize);
+				hex.setShape(p);
+				this.add(hex);
+				hex.paintComponent(g);
 				m = (m == -1) ? (((double)hex.getYCos()[1] - hex.getYCos()[0])
 						/((double)hex.getXCos()[1] - hex.getXCos()[0])) : m;
+//				Graphics2D g2 = (Graphics2D) g;
+//				g2.setColor(Color.black);
+//				g2.setStroke(new BasicStroke(st));
+//				g2.drawPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+//				g.setColor(hex.getColor());
+//				g.fillPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+
 //				System.out.println("Y: " + (hex.getYCos()[1] - hex.getYCos()[0]));
 //				System.out.println("X: " + (hex.getXCos()[1] - hex.getXCos()[0]));
 //				System.out.println("Slope/Const Upper Left: " + m + "/" + (-(m*hex.getXCos()[0]) + hex.getYCos()[0]));
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setColor(Color.black);
-				g2.setStroke(new BasicStroke(st));
-				g2.drawPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
-				g.setColor(hex.getColor());
-				g.fillPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+				//hexs[row][col] = hex;
 				//g.drawChars(new char[] {'A'}, 0, 1, hex.getTextX() + xOff, hex.getTextY() + yOff);
 			}
 			counter++;
@@ -106,15 +124,19 @@ public class HexMap extends JPanel {
 	}
 	
 	public Hex getHex(int x, int y) {
-		int xG = x / xSize;
-		int yG = y / ySize; 
+		int col = (x - xOff) / xSize;
+		int row = (y - yOff) / ySize; 
 		
-		if(xG > xSize * xCols || yG > ySize * yRows) {
+		if(col > xSize * cols + xOff || row > ySize * rows + yOff) {
 			System.out.println("Invalid point");
 		}else {
 			
 		}
-		return hexs[x][y];
+		System.out.println("X/Y: " + col + "/" + row);
+//		hexs[row][col].setColor(Color.GREEN);
+//		repaint();
+//		return hexs[row][col];
+		return new Hex();
 	}
 
 	/*	
