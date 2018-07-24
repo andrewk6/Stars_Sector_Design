@@ -5,7 +5,8 @@
  * and open the template in the editor.
  */
 //package polycreation;
-import java.awt.Graphics;
+import java.awt.*;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -16,12 +17,14 @@ import javax.swing.JPanel;
 public class HexMap extends JPanel {
 
 	private int ySize = 18;
-	private int yOff = 5;
+	private int yOff = 50;
 	private int yRows = 15;
 
 	private int xSize = 24;
-	private int xOff = 5;
+	private int xOff = 50;
 	private int xCols = 11;
+	
+	private int st = 3;
 
 	private Hex[][] hexs;
 
@@ -48,7 +51,12 @@ public class HexMap extends JPanel {
 						(yValue + ((ySize / 3) + ySize)), (yValue + ySize) };
 				
 				Hex hex = new Hex(xValues, yValues, xSize, ySize);
-				g.drawPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setColor(Color.black);
+				g2.setStroke(new BasicStroke(st));
+				g2.drawPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+				g.setColor(Color.blue);
+				g.fillPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
 				//g.drawChars(new char[] {'A'}, 0, 1, hex.getTextX() + xOff, hex.getTextY() + yOff);
 			}
 			counter++;
@@ -62,7 +70,7 @@ public class HexMap extends JPanel {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("JavaTutorial.net");
 		frame.getContentPane().add(new HexMap());
-		frame.setSize(300, 300);
+		frame.setSize(500, 500);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
