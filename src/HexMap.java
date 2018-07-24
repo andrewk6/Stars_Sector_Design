@@ -40,12 +40,16 @@ public class HexMap extends JPanel {
 			}
 
 			for (int xValue = strtXVal; xValue < xCols * xSize; xValue += xSize) {
+				
 				int xValues[] = { xValue, (xValue + xSize / 2), (xValue + xSize), (xValue + xSize),
 						(xValue + xSize / 2), (xValue + 0) };
+				
 				int yValues[] = { (yValue + ySize / 3), yValue, (yValue + ySize / 3), (yValue + ySize),
 						(yValue + ((ySize / 3) + ySize)), (yValue + ySize) };
-				Hex hex = new Hex(xValues, yValues);
+				
+				Hex hex = new Hex(xValues, yValues, xSize, ySize);
 				g.drawPolygon(hex.getXCos(), hex.getYCos(), Hex.HEX_POINTS);
+				//g.drawChars(new char[] {'A'}, 0, 1, hex.getTextX() + xOff, hex.getTextY() + yOff);
 			}
 			counter++;
 		}
