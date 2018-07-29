@@ -1,7 +1,9 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-public class Hex extends JButton{
+public class Hex{
 	public static final int HEX_POINTS = 6;
 	
 	private int[] xCoords;
@@ -23,7 +25,10 @@ public class Hex extends JButton{
 	private Color col;
 	private Shape s;
 	
+	private Polygon p;
+	
 	public Hex() {
+		super();
 		xCoords = new int[6];
 		yCoords = new int[6];
 		xSize = -1;
@@ -80,12 +85,7 @@ public class Hex extends JButton{
 		col = Color.blue;
 	}
 	
-	public Hex(int[]xs, int[] ys, int xS, int yS) {
-		this.setOpaque(true);
-		setContentAreaFilled(false);
-        setFocusPainted(true);
-        setBorderPainted(false);
-		
+	public Hex(int[]xs, int[] ys, int xS, int yS, Polygon p) {		
 		if(xs.length == 6)
 			xCoords = xs;
 		else {
@@ -106,28 +106,69 @@ public class Hex extends JButton{
 		textCo[1] = yCoords[2];
 		
 		col = Color.blue;
-		
-		this.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Please Be Here in Hex Class");
-				setColor(Color.green);
-				repaint();
-			}
-		});
+		this.p = p;
 	}
 	
 	public void paintComponent(Graphics g) {
 		//System.out.println("Painting 2");
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(col);
-		System.out.println(col);
-		g2.fill(s);
+		//System.out.println(col);
+		g2.fill(p);
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.black);
-		g2.draw(s);
+		g2.draw(p);
 	}
+	
+//	int n=6;
+//	int x[]= new int[n];
+//	int y[]= new int[n];
+//	double angle = 2*Math.PI/n;
+//	protected void paintComponent(Graphics g) {
+//	    if (getModel().isArmed()) {
+//	        g.setColor(Color.lightGray);
+//	    } else {
+//	        g.setColor(getBackground());
+//	    }
+//	    int x0 = getSize().width/2;
+//	    int y0 = getSize().height/2;
+//	    for(int i=0; i<n; i++) {
+//	        double v = i*angle;
+//	        x[i] = x0 + (int)Math.round((getWidth()/2)*Math.cos(v));
+//	        y[i] = y0 + (int)Math.round((getHeight()/2)*Math.sin(v));
+//	    }
+//	    g.fillPolygon(x, y, n);
+//	    super.paintComponent(g);
+//	}
+//	 
+//	protected void paintBorder(Graphics g) {
+//	    g.setColor(getForeground());
+//	    int x0 = getSize().width/2;
+//	    int y0 = getSize().height/2;
+//	    for(int i=0; i<n; i++) {
+//	        double v = i*angle;
+//	        x[i] = x0 + (int)Math.round((getWidth()/2)*Math.cos(v));
+//	        y[i] = y0 + (int)Math.round((getHeight()/2)*Math.sin(v));
+//	    }
+//	    g.drawPolygon(x, y, n);
+//	}
+//	 
+//	Polygon polygon;
+//	public boolean contains(int x1, int y1) {
+//	    if (polygon == null ||
+//	            !polygon.getBounds().equals(getBounds())) {
+//	        int x0 = getSize().width/2;
+//	        int y0 = getSize().height/2;
+//	        for(int i=0; i<n; i++) {
+//	            double v = i*angle;
+//	            x[i] = x0 + (int)Math.round((getWidth()/2)*Math.cos(v));
+//	            y[i] = y0 + (int)Math.round((getHeight()/2)*Math.sin(v));
+//	        }
+//	        polygon = new Polygon(x,y,n);
+//	    }
+//	    return polygon.contains(x1, y1);
+//	}
+	
 	
 	public int[] getXCos() {
 		return xCoords;
@@ -153,8 +194,7 @@ public class Hex extends JButton{
 		return col;
 	}
 	
-	public void setShape(Shape s) {
-		this.s = s;
-		this.setBounds(s.getBounds());
+	public Polygon getPolygon() {
+		return p;
 	}
 }
