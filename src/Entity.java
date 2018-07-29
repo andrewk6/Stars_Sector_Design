@@ -1,9 +1,13 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Entity {
 
 	private String name;
 	private String faction;
 	private String description;
+	private HashMap<String, Entity> entities;
+	//location in array
 	private int xCordinate;
 	private int yCordinate;
 	
@@ -39,8 +43,16 @@ public class Entity {
 		this.description = description;
 	}
 	
-	
+	public String getCordinates() {
+		
+		return String.format("%2d%2d", xCordinate, yCordinate);
+	}
 
+	public void setCordinates(int xCordinate, int yCordinate) {
+		this.xCordinate = xCordinate;
+		this.yCordinate = yCordinate;
+	}
+	
 	public int getxCordinate() {
 		return xCordinate;
 	}
@@ -60,5 +72,15 @@ public class Entity {
 	@Override
 	public String toString(){
 		return String.format("%s: %s", name, description);
+	}
+	public void addEntity(HashMap<String, Entity> entity) {
+		 
+	}
+	
+	public HashMap<String, Entity> getEntities() {
+		return entities;
+	}
+	public void setEntities(HashMap<String, Entity> entities) {
+		this.entities = entities;
 	}
 }
